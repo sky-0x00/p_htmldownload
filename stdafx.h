@@ -18,7 +18,16 @@ typedef wchar_t char_t;
 typedef char_t *str_t;
 typedef const char_t *cstr_t;
 
+typedef unsigned char byte_t;
+
 typedef std::wstring string_t;
+
+//struct strinfo
+//{
+//	cstr_t data;
+//	unsigned length;
+//};
+//typedef struct strinfo strinfo_t;
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы
 #define OFILE_NAME		L"result.html"
