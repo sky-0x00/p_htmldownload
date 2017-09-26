@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include <winsock2.h>
+#include <array>
 
 #define PORT_HTTP		80
 
@@ -29,12 +30,25 @@ public:
 	class address
 	{
 	public:
-		typedef byte_t ipv4_t[4];
-		//typedef in_addr ipv4_t;
+		class ipv4
+		{
+		public:
+			ipv4( _in const ipv4 &ipv4 );
+			ipv4( _in ipv4 &&ipv4 );
+			ipv4( _in const std::array< byte_t, 4 > &data );
+			ipv4( _in std::array< byte_t, 4 > &&data );
+			const string_t& to_string();
+			operator ULONG() const;
+		private:
+			std::array< byte_t, 4 > m_data;
+			string_t m_string;
+		};
+
+		typedef ipv4 host_t;
 		typedef unsigned short port_t;
 		
-		address( _in ipv4_t host, _in port_t port = PORT_HTTP );
-		address( _in cstr_t host, _in port_t port = PORT_HTTP );
+		address( _in host_t host, _in port_t port = PORT_HTTP );		// host - by address
+		address( _in cstr_t host, _in port_t port = PORT_HTTP );		// host - by dnsname
 
 		operator const sockaddr_in&() const;
 		operator const sockaddr&() const;

@@ -133,14 +133,14 @@ wsa::error socket::connect(
 
 //------------------------------------------------------------------------------------------------------
 socket::address::address(
-	_in ipv4_t host, 
+	_in host_t host, 
 	_in port_t port /*= PORT_HTTP*/
 ) :
 	m_data( {0} )
 {
 	m_data.sin_family = AF_INET;
 	m_data.sin_port = htons( port );
-	m_data.sin_addr.s_addr = *reinterpret_cast< const ULONG* >( host );
+	m_data.sin_addr.s_addr = host;						// неявно к типу ULONG
 	
 	//m_data.sin_addr.S_un.S_un_b.s_b1 = host[0];		// верный порядок
 	//m_data.sin_addr.S_un.S_un_b.s_b2 = host[1];
@@ -188,4 +188,57 @@ socket::address::operator const sockaddr&(
 
 
 //------------------------------------------------------------------------------------------------------
+socket::address::ipv4::ipv4( 
+	_in const ipv4 &ipv4 
+) :
+	m_data( ipv4.m_data ),
+	m_string( ipv4.m_string )
+{
+}
+socket::address::ipv4::ipv4( 
+	_in ipv4 &&ipv4 
+) {
+	std::swap( *this, ipv4 );
+}
+
+socket::address::ipv4::ipv4( 
+	_in const std::array< byte_t, 4 > &data 
+) :
+	m_data( data )
+{
+	//std::copy( data.begin(), data.end(), m_data.begin() );
+}
+socket::address::ipv4::ipv4( 
+	_in std::array< byte_t, 4 > &&data 
+) {
+	m_data.swap( data );
+}
+
+const string_t& socket::address::ipv4::to_string(
+) {
+	if ( m_string.empty() )
+	{
+		m_string.reserve(16);		
+		char_t buffer[4];
+
+		auto error = _ultow_s( m_data[0], buffer, 10 );
+		assert( !error );
+		m_string += buffer;
+
+		for ( auto i = 1; i < 4; ++i )
+		{
+			m_string.push_back( L'.' );
+			error = _ultow_s( m_data[i], buffer, 10 );
+			assert( !error );
+			m_string += buffer;
+		}
+	}
+	return m_string;
+}
+
+socket::address::ipv4::operator ULONG(
+) const {
+	return *reinterpret_cast< const ULONG* >( m_data.data() );
+}
+
 //------------------------------------------------------------------------------------------------------

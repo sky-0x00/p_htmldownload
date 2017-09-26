@@ -64,8 +64,11 @@ int wmain(
 		//request::get_host( L"http://ya.ru/sdasda", host );
 		//request::get_host( L"http://ya.ru/sdasda/", host );
 
-		socket::address sock_addr1( socket::address::ipv4_t{ 87,250,250,242 }, 80 );
-		socket::address sock_addr2( socket::address::ipv4_t{ 87,250,250,242 } );
+		socket::address::ipv4 host1( { 87,250,250,242 } );
+		auto s = host1.to_string();
+
+		socket::address sock_addr1( std::array< byte_t, 4 >({ 87,250,250,242 }), 80 );
+		socket::address sock_addr2( std::array< byte_t, 4 >({ 87,250,250,242 }) );
 		socket::address sock_addr3( L"ya.ru", 80 );
 		socket::address sock_addr4( L"ya.ru" );
 
