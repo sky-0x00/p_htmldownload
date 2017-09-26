@@ -108,7 +108,7 @@ socket::socket(
 
 socket::~socket(
 ) {
-	/*const auto result =*/ closesocket( m_data );
+	/*const auto result =*/ ::closesocket( m_data );
 	//if ( SOCKET_ERROR == result )
 	//	throw wsa::get_error();
 }
@@ -129,6 +129,15 @@ wsa::error socket::connect(
 		default:
 			throw wsa::get_error();
 	}
+}
+
+void socket::send(
+	_in cstr_t request
+) {
+	assert( request );
+	assert( m_isconnected );
+
+	::send( m_data, request,  );
 }
 
 //------------------------------------------------------------------------------------------------------

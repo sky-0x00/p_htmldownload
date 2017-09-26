@@ -59,7 +59,9 @@ public:
 
 	socket();
 	~socket();
+
 	wsa::error connect( _in const address &address );
+	void send( _in cstr_t request );
 
 private:
 	SOCKET m_data;

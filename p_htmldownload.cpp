@@ -73,7 +73,7 @@ int wmain(
 		socket::address sock_addr4( L"ya.ru" );
 
 		class socket socket;
-		auto result = socket.connect( sock_addr1 );
+		auto result = socket.connect( sock_addr4 );
 	}
 	catch (...) {
 		wprintf_s( L"exception: -1\n" );
